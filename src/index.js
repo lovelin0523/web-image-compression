@@ -54,7 +54,7 @@ class ImageCompression {
 				var context = canvas.getContext('2d');
 				img.onload = () => {
 					//获取生成的文件
-					var compressionFile = this._createFile(canvas,context,img);
+					var compressionFile = this._createFile(canvas,context,img,file);
 					resolve(compressionFile);
 				}
 				img.onerror = error => {
@@ -71,7 +71,7 @@ class ImageCompression {
 	/**
 	 * 压缩实现
 	 */
-	_createFile(canvas,context,img){
+	_createFile(canvas,context,img,file){
 		canvas.width = this.width || img.width;
 		canvas.height = this.width?(this.width / (img.width / img.height)):img.height;
 		context.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -80,7 +80,7 @@ class ImageCompression {
 		//比最大尺寸大，继续压缩，此时会降低质量
 		if(this.maxSize > 0 && compressionFile.size > this.maxSize * 1024){
 			this.quality = (this.quality <= 0.1?0.1:this.quality-0.1);
-			compressionFile = this._createFile(canvas,context,img)
+			compressionFile = this._createFile(canvas,context,img,file)
 		}
 		return compressionFile;
 	}
