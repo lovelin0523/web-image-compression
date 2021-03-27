@@ -18,4 +18,4 @@ imageCompression.compress(file).then(newFile=>{
 })
 ```
 
-### 具体使用方法请到我的网站查看：[rem-fit](https://www.mvi-web.cn/library/24)
+### 具体使用方法请到我的网站查看：[web-image-compression](https://www.mvi-web.cn/library/24)
