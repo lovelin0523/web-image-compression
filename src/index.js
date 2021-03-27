@@ -48,12 +48,12 @@ class ImageCompression {
 					resolve(compressionFile);
 				}
 				img.onerror = error => {
-					reject(error)
+					reject(new Error('加载图片失败'))
 				}
 			}
 
 			reader.onerror = error => {
-				reject(error);
+				reject(new Error('读取文件失败'));
 			}
 		})
 	}

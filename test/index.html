@@ -21,6 +21,8 @@
 			console.log(file,file.size / 1024)
 			imageCompression.compress(file).then(newFile=>{
 				console.log(newFile,newFile.size / 1024)
+			}).catch(error=>{
+				console.log(error)
 			})
 		}
 	</script>
