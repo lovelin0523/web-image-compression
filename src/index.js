@@ -6,7 +6,9 @@ class ImageCompression {
 		this.$options = options;
 		this.width = null; //压缩图片的宽，单位px，如果不设置默认为原图宽
 		this.quality = 0.8; //压缩图片质量，默认为原图的0.8
-		this.mimeType = 'png';//图片类型，默认为png
+		this.mimeType = 'jpeg';//图片类型，jpeg或者webp，默认为jpeg
+		this.maxSize = 0;//压缩后的最大值，单位kb，默认为0表示不设置此值
+		this.minSize = 0;//小于该大小的图片不进行压缩，单位kb，默认为0表示任何图片都要压缩
 		this._init();
 	}
 
@@ -24,6 +26,12 @@ class ImageCompression {
 		if(this.$options.mimeType && typeof this.$options.mimeType == 'string'){
 			this.mimeType = this.$options.mimeType;
 		}
+		if (this.$options.maxSize && typeof(this.$options.maxSize) == 'number' && this.$options.maxSize > 0) {
+			this.maxSize = this.$options.maxSize;
+		}
+		if (this.$options.minSize && typeof(this.$options.minSize) == 'number' && this.$options.minSize > 0) {
+			this.minSize = this.$options.minSize;
+		}
 	}
 
 	/**
@@ -32,6 +40,11 @@ class ImageCompression {
 	 */
 	compress(file) {
 		return new Promise((resolve, reject) => {
+			//小于minSize的图片不压缩
+			if(this.minSize > 0 && file.size <= this.minSize * 1024){
+				resolve(file);
+				return;
+			}
 			var reader = new FileReader();
 			reader.readAsDataURL(file);
 			var img = new Image;
@@ -40,11 +53,8 @@ class ImageCompression {
 				var canvas = document.createElement('canvas');
 				var context = canvas.getContext('2d');
 				img.onload = () => {
-					canvas.width = this.width || img.width;
-					canvas.height = this.width?(this.width / (img.width / img.height)):img.height;
-					context.drawImage(img, 0, 0, canvas.width, canvas.height);
-					var url = canvas.toDataURL("image/"+this.mimeType, this.quality);
-					var compressionFile = this._dataBase64toFile(url,this._newFileName(file.name));
+					//获取生成的文件
+					var compressionFile = this._createFile(canvas,context,img);
 					resolve(compressionFile);
 				}
 				img.onerror = error => {
@@ -56,6 +66,23 @@ class ImageCompression {
 				reject(new Error('读取文件失败'));
 			}
 		})
+	}
+	
+	/**
+	 * 压缩实现
+	 */
+	_createFile(canvas,context,img){
+		canvas.width = this.width || img.width;
+		canvas.height = this.width?(this.width / (img.width / img.height)):img.height;
+		context.drawImage(img, 0, 0, canvas.width, canvas.height);
+		var url = canvas.toDataURL("image/"+this.mimeType, this.quality);
+		var compressionFile = this._dataBase64toFile(url,this._newFileName(file.name));
+		//比最大尺寸大，继续压缩，此时会降低质量
+		if(this.maxSize > 0 && compressionFile.size > this.maxSize * 1024){
+			this.quality = (this.quality <= 0.1?0.1:this.quality-0.1);
+			compressionFile = this._createFile(canvas,context,img)
+		}
+		return compressionFile;
 	}
 	
 	/**
