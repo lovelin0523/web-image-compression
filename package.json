@@ -1,0 +1,28 @@
+{
+	"name": "web-image-compression",
+	"version": "0.0.1",
+	"description": "一款轻量且简单的web前端图片压缩插件",
+	"main": "dist/web-image-compression.js",
+	"private": false,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"serve": "webpack --mode development",
+		"build": "webpack --mode production"
+	},
+	"author": "lingkai",
+	"license": "MIT",
+	"babel": {
+		"presets": [
+			"env"
+		],
+		"plugins": []
+	},
+	"devDependencies": {
+		"babel-core": "^6.26.3",
+		"babel-loader": "^7.1.5",
+		"babel-preset-env": "^1.7.0",
+		"webpack": "^4.46.0",
+		"webpack-cli": "^4.5.0"
+	},
+	"github": "https://github.com/lovelin0523/web-image-compression"
+}

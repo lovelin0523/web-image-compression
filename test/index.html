@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+		<title>图片压缩测试</title>
+	</head>
+	<body>
+		<input id="file" type="file" onchange="change();" />
+		<img id="image" />
+	</body>
+	<script src="../dist/web-image-compression.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		var imageCompression = new ImageCompression({
+			quality:0.8,
+			mimeType:'png'
+		});
+		
+		function change(){
+			var file = document.getElementById("file").files[0];
+			console.log(file,file.size / 1024)
+			imageCompression.compress(file).then(newFile=>{
+				console.log(newFile,newFile.size / 1024)
+			})
+		}
+	</script>
+</html>
