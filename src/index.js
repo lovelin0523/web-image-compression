@@ -44,7 +44,7 @@ class ImageCompression {
 					canvas.height = this.width?(this.width / (img.width / img.height)):img.height;
 					context.drawImage(img, 0, 0, canvas.width, canvas.height);
 					var url = canvas.toDataURL("image/"+this.mimeType, this.quality);
-					var compressionFile = this._dataBase64toFile(url,file.name);
+					var compressionFile = this._dataBase64toFile(url,this._newFileName(file.name));
 					resolve(compressionFile);
 				}
 				img.onerror = error => {
@@ -75,6 +75,17 @@ class ImageCompression {
 		return new File([u8arr], fileName, {
 			type: mime,
 		});
+	}
+	
+	/**
+	 * 生成新的文件名称
+	 * @param {Object} fileName
+	 */
+	_newFileName(fileName){
+		var index = fileName.lastIndexOf('.');
+		var suffix = fileName.substr(index);
+		var name = fileName.substr(0,index);
+		return name + '.' + this.mimeType;
 	}
 }
 
