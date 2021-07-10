@@ -1,6 +1,6 @@
 {
 	"name": "web-image-compression",
-	"version": "0.0.4",
+	"version": "1.0.0",
 	"description": "一款轻量且简单的web前端图片压缩插件",
 	"main": "dist/web-image-compression.js",
 	"private": false,

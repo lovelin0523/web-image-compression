@@ -17,19 +17,19 @@ class ImageCompression {
 		if(typeof this.$options != 'object' && !this.$options){
 			this.$options = {};
 		}
-		if (this.$options.width && typeof(this.$options.width) == 'number' && this.$options.width > 0) {
+		if (this.$options.width && typeof this.$options.width == 'number' && this.$options.width > 0) {
 			this.width = this.$options.width;
 		}
-		if (this.$options.quality && typeof(this.$options.quality) == 'number' && this.$options.quality > 0) {
+		if (this.$options.quality && typeof this.$options.quality == 'number' && this.$options.quality > 0) {
 			this.quality = this.$options.quality;
 		}
 		if(this.$options.mimeType && typeof this.$options.mimeType == 'string'){
 			this.mimeType = this.$options.mimeType;
 		}
-		if (this.$options.maxSize && typeof(this.$options.maxSize) == 'number' && this.$options.maxSize > 0) {
+		if (this.$options.maxSize && typeof this.$options.maxSize == 'number' && this.$options.maxSize > 0) {
 			this.maxSize = this.$options.maxSize;
 		}
-		if (this.$options.minSize && typeof(this.$options.minSize) == 'number' && this.$options.minSize > 0) {
+		if (this.$options.minSize && typeof this.$options.minSize == 'number' && this.$options.minSize > 0) {
 			this.minSize = this.$options.minSize;
 		}
 	}
@@ -45,16 +45,16 @@ class ImageCompression {
 				resolve(file);
 				return;
 			}
-			var reader = new FileReader();
+			let reader = new FileReader();
 			reader.readAsDataURL(file);
-			var img = new Image;
+			let img = new Image;
 			reader.onload = e => {
 				img.src = reader.result;
-				var canvas = document.createElement('canvas');
-				var context = canvas.getContext('2d');
+				let canvas = document.createElement('canvas');
+				let context = canvas.getContext('2d');
 				img.onload = () => {
 					//获取生成的文件
-					var compressionFile = this._createFile(canvas,context,img,file);
+					let compressionFile = this._createFile(canvas,context,img,file);
 					resolve(compressionFile);
 				}
 				img.onerror = error => {
@@ -75,8 +75,8 @@ class ImageCompression {
 		canvas.width = this.width || img.width;
 		canvas.height = this.width?(this.width / (img.width / img.height)):img.height;
 		context.drawImage(img, 0, 0, canvas.width, canvas.height);
-		var url = canvas.toDataURL("image/"+this.mimeType, this.quality);
-		var compressionFile = this._dataBase64toFile(url,this._newFileName(file.name));
+		let url = canvas.toDataURL("image/"+this.mimeType, this.quality);
+		let compressionFile = this._dataBase64toFile(url,this._newFileName(file.name));
 		//比最大尺寸大，继续压缩，此时会降低质量
 		if(this.maxSize > 0 && compressionFile.size > this.maxSize * 1024){
 			this.quality = (this.quality <= 0.1?0.1:this.quality-0.1);
@@ -109,17 +109,17 @@ class ImageCompression {
 	 * @param {Object} fileName
 	 */
 	_newFileName(fileName){
-		var index = fileName.lastIndexOf('.');
-		var suffix = fileName.substr(index);
-		var name = fileName.substr(0,index);
+		let index = fileName.lastIndexOf('.');
+		let suffix = fileName.substr(index);
+		let name = fileName.substr(0,index);
 		return name + '.' + this.mimeType;
 	}
 }
 
 const packages = require('../package.json');
 
-console.log('%c感谢使用' + packages.name + '，当前版本：%c v' + packages.version + '\n%c' + packages.name +
-	'完全由个人开发，如果你觉得还不错的话，欢迎前往github给个star，感谢！\ngithub地址：%c' + packages.github, 'color:#808080;', 'color:#008a00',
+console.log('%c感谢使用' + packages.name + '，当前版本：%c v' + packages.version + '\n%c如果你觉得' + packages.name +
+	'还不错，不妨去github点个star\ngithub地址：%c' + packages.github, 'color:#808080;', 'color:#008a00',
 	'color:#808080;', 'color:#008a00');
 
 
