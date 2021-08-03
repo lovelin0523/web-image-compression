@@ -79,7 +79,7 @@ class ImageCompression {
 		let compressionFile = this._dataBase64toFile(url,this._newFileName(file.name));
 		//比最大尺寸大，继续压缩，此时会降低质量
 		if(this.maxSize > 0 && compressionFile.size > this.maxSize * 1024){
-			this.quality = (this.quality <= 0.1?0.1:this.quality-0.1);
+			this.quality = (this.quality <= 0?0:this.quality-0.01);
 			compressionFile = this._createFile(canvas,context,img,file)
 		}
 		return compressionFile;
